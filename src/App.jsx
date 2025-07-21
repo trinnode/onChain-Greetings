@@ -19,9 +19,12 @@ function App() {
         return;
       }
 
-      if (window.ethereum && window.ethereum.isMetaMask && window.ethereum.selectedAddress) {
+      const { ethereum } = window;
+
+      if (ethereum && ethereum.isMetaMask) {
         await requestAccount();
-        const provider = new ethers.BrowserProvider(window.ethereum);
+
+        const provider = new ethers.BrowserProvider(ethereum);
         const signer = await provider.getSigner();
         const contract = new ethers.Contract(contractAddress, abi, signer);
 
@@ -39,8 +42,10 @@ function App() {
 
   const handleGet = async () => {
     try {
-      if (window.ethereum && window.ethereum.isMetaMask) {
-        const provider = new ethers.BrowserProvider(window.ethereum);
+      const { ethereum } = window;
+
+      if (ethereum && ethereum.isMetaMask) {
+        const provider = new ethers.BrowserProvider(ethereum);
         const contract = new ethers.Contract(contractAddress, abi, provider);
         const message = await contract.getMessage();
         setFetchedMessage(message);
